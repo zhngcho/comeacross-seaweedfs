@@ -119,3 +119,16 @@
 3. 保存 fid 或者直接保存 URL(http://{volume server ip}:{volume server port}/{fid})
 
 **ps: ttl 支持 'm', 'h', 'd', 'w',  'M', 'y'**
+
+### 设置 replica
+
+- 待更新
+
+
+
+
+
+# 相关链接
+
+- [How it works](./HowSeaweedfsWorks.md)
+- [What is seaweedfs](./index.md)
