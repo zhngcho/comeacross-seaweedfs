@@ -150,21 +150,25 @@ This is a note of seaweedfs, consisting of
 
 ### 设置 TTL
 
+1. 向 master server 发起 GET 请求获取 fid 和 volume server 信息（事实上 POST, PUT 请求也可以 ）, ttl 参数表示需要分配一个 ttl = 3min 的volume
 
+   ```shell
+   curl http://localhost:9333/dir/assign?ttl=3m
+   # 请求结果为
+   # {"count":1,"fid":"3,01637037d6","url":"127.0.0.1:8080","publicUrl":"localhost:8080"}
+   ```
 
-## Replica
+2. 向 volume server 发起 multi-part POST 请求
 
-### Data Center
+   ```shell
+   curl -F file=@/home/chris/myphoto.jpg http://127.0.0.1:8080/3,01637037d6?ttl=3m
+   # 请求结果为
+   # {"name":"myphoto.jpg","size":43234,"eTag":"1cc0118e"}
+   ```
 
+3. 保存 fid 或者直接保存 URL(http://{volume server ip}:{volume server port}/{fid})
 
-
-### Rack
-
-
-
-### Data Node
-
-
+**ps: ttl 支持 'm', 'h', 'd', 'w',  'M', 'y'**
 
 ## Concepts
 
@@ -174,7 +178,9 @@ This is a note of seaweedfs, consisting of
 - super block, 直译超级块，每个 volume 中会有一个超级块（占用8 bytes），用来记录 Version， Replica Placement strategy， TTL， Compact times 信息
 - store, 每个 volume server 只有一个 store， 用来管理所有位于这个 volume server 上的 volumes
 
+## super block 内存布局
 
+![super block](./figures/super_block.png)
 
 ## needle && volume
 
@@ -198,7 +204,17 @@ This is a note of seaweedfs, consisting of
 
 
 
-#### 
+## Replica
+
+### Data Center
+
+
+
+### Rack
+
+
+
+### Data Node
 
 
 
@@ -228,11 +244,9 @@ This is a note of seaweedfs, consisting of
 
 #### volume 节点内 goroutine 模型图
 
+#### ttl 实现方式
 
 
-
-
-#### 
 
 
 
